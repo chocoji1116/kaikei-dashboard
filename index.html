@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -905,7 +906,7 @@ function renderSummary() {
 
   let income = 0, expense = 0;
   allRecords.forEach(r => {
-    const rd = String(r.date);
+    const rd = normalizeDate(r.date);
     if (rd.startsWith(currentMonth)) {
       if (r.type === '収入' || INCOME_CATEGORIES.includes(r.category)) {
         income += Number(r.amount) || 0;
@@ -929,7 +930,7 @@ function renderDonut() {
 
   const catTotals = {};
   allRecords.forEach(r => {
-    const rd = String(r.date);
+    const rd = normalizeDate(r.date);
     if (rd.startsWith(currentMonth) && r.type !== '収入' && !INCOME_CATEGORIES.includes(r.category)) {
       catTotals[r.category] = (catTotals[r.category] || 0) + (Number(r.amount) || 0);
     }
@@ -1005,7 +1006,7 @@ function renderDonut() {
 function renderBarChart() {
   const monthly = {};
   allRecords.forEach(r => {
-    const rd = String(r.date);
+    const rd = normalizeDate(r.date);
     const ym = rd.substring(0, 7);
     if (!monthly[ym]) monthly[ym] = { income: 0, expense: 0 };
     if (r.type === '収入' || INCOME_CATEGORIES.includes(r.category)) {
@@ -1059,7 +1060,7 @@ function renderTable() {
 
   // 新しい順にソート
   const sorted = [...allRecords].sort((a, b) => {
-    return String(b.date).localeCompare(String(a.date));
+    return normalizeDate(b.date).localeCompare(normalizeDate(a.date));
   });
 
   tbody.innerHTML = sorted.map(r => {
