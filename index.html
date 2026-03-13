@@ -758,6 +758,16 @@ const CATEGORY_COLORS = {
 
 let allRecords = [];
 
+function normalizeDate(d) {
+  if (!d) return '';
+  const s = String(d);
+  if (s.includes('T')) {
+    const dt = new Date(s);
+    return dt.getFullYear() + '/' + String(dt.getMonth()+1).padStart(2,'0') + '/' + String(dt.getDate()).padStart(2,'0');
+  }
+  return s.replace(/-/g, '/');
+}
+
 // ========================================
 // 認証
 // ========================================
@@ -1058,7 +1068,7 @@ function renderTable() {
     const typeLabel = isIncome ? '収入' : '支出';
     const amount = Number(r.amount) || 0;
     return `<tr>
-      <td>${escapeHtml(String(r.date))}</td>
+      <td>${escapeHtml(normalizeDate(r.date))}</td>
       <td>${escapeHtml(r.author || '')}</td>
       <td>${escapeHtml(r.category || '')}</td>
       <td><span class="type-badge ${typeClass}">${typeLabel}</span></td>
